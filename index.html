@@ -41,6 +41,15 @@ button:active{transform:scale(.97)}
 .scenario-num{font-size:15px;font-weight:800;color:#3D1951}
 .remove-btn{background:none;border:none;font-size:16px;color:#9B9BAF;padding:2px 6px;border-radius:4px}
 .add-btn{background:none;border:1px dashed #3EB049;border-radius:6px;padding:8px 16px;font-size:14px;font-weight:700;color:#3EB049}
+/* ── Ghost Scenario Card ── */
+.scenario-card-ghost{background:#F7F7F8;border:1px dashed #D0D0DA;border-radius:10px;padding:16px 18px;opacity:.45;cursor:pointer;transition:opacity .2s,border-color .2s;position:relative}
+.scenario-card-ghost:hover{opacity:.7;border-color:#3EB049}
+.scenario-card-ghost .ghost-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:2}
+.scenario-card-ghost .ghost-overlay span{background:#3D1951;color:#FFF;font-size:13px;font-weight:700;padding:8px 18px;border-radius:6px;opacity:0;transition:opacity .2s;text-transform:uppercase;letter-spacing:.5px}
+.scenario-card-ghost:hover .ghost-overlay span{opacity:1}
+.scenario-card-ghost .input-wrap{pointer-events:none;background:#EDEDF0}
+.scenario-card-ghost .input-wrap input{color:#C0C0CC}
+.scenario-card-ghost .toggle-btn{pointer-events:none}
 .loan-preview{margin-top:8px;font-size:12px;color:#5A5A72;line-height:1.5;background:#FFF;border-radius:6px;padding:6px 10px;border:1px solid #E8E8EC}
 .toggle-wrap{display:flex;border-radius:6px;overflow:hidden;border:1px solid #E8E8EC;flex-shrink:0}
 .toggle-btn{padding:8px 12px;font-size:14px;font-weight:700;border:none;background:#FFF;color:#9B9BAF;transition:all .15s}
@@ -103,7 +112,31 @@ td .sub{font-size:11px;color:#9B9BAF}
 .footer{margin-top:32px;text-align:center;font-size:10px;color:#9B9BAF;letter-spacing:.3px;line-height:1.5}
 .hidden{display:none}
 .section-top{display:flex;justify-content:space-between;align-items:center}
-@media(max-width:600px){.amort-grid,.defaults-grid{grid-template-columns:1fr}.ad-top{flex-direction:column;text-align:center}.ad-bottom{flex-direction:column;align-items:center;text-align:center}.ad-contact-block{border-right:none;border-bottom:1px solid rgba(255,255,255,.12);padding:24px 0 20px 0}.ad-logo-block{padding:20px 0 0 0}.ad-logo-block img{margin:0 auto}}
+/* ── MI Tooltip ── */
+.mi-info-icon{display:inline-block;cursor:help;font-size:13px;color:#3EB049;position:relative;vertical-align:middle;margin-left:2px}
+.mi-info-icon:hover::after{content:attr(title);position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);width:280px;padding:10px 12px;background:#3D1951;color:#FFF;font-size:11px;font-weight:500;line-height:1.5;border-radius:8px;z-index:100;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.25);text-transform:none;letter-spacing:0}
+.mi-info-icon:hover::before{content:'';position:absolute;bottom:calc(100% + 2px);left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#3D1951;z-index:101}
+/* ── How To ── */
+.how-to-section{margin-top:14px;padding:14px 20px;background:#F3EDF7;border:1px solid #E0D4EB;border-radius:10px}
+.how-to-toggle{display:flex;align-items:center;gap:8px;cursor:pointer;font-size:13px;font-weight:700;color:#3D1951;text-transform:uppercase;letter-spacing:.5px;background:none;border:none;padding:0;width:100%}
+.how-to-toggle .arrow{transition:transform .2s;font-size:11px}
+.how-to-toggle.open .arrow{transform:rotate(90deg)}
+.how-to-body{margin-top:10px;font-size:12.5px;color:#5A5A72;line-height:1.7}
+.how-to-body ol{margin:0;padding-left:20px}
+.how-to-body ol li{margin-bottom:4px}
+.how-to-body .tip{margin-top:8px;font-style:italic;color:#9B9BAF;font-size:11.5px}
+/* ── Mobile Result Cards ── */
+.mobile-results-wrap{display:none;padding:16px}
+.mobile-result-card{background:#F7F7F8;border:1px solid #E8E8EC;border-radius:10px;padding:16px;margin-bottom:12px}
+.mrc-header{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:#3D1951;margin-bottom:8px}
+.mrc-total{font-size:24px;font-weight:800;color:#3D1951;font-family:'Source Serif 4',Georgia,serif;margin-bottom:12px;border-bottom:2px solid #3EB049;padding-bottom:10px}
+.mrc-total-label{font-size:12px;font-weight:600;color:#9B9BAF;margin-left:6px;font-family:'Raleway',sans-serif;text-transform:uppercase;letter-spacing:.3px}
+.mrc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 12px}
+.mrc-item{display:flex;justify-content:space-between;align-items:baseline;padding:4px 0}
+.mrc-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#9B9BAF}
+.mrc-val{font-size:14px;font-weight:600;color:#2A2A3C;font-family:'Source Serif 4',Georgia,serif}
+.mrc-val.clickable{color:#3EB049;cursor:pointer;text-decoration:underline}
+@media(max-width:600px){.amort-grid,.defaults-grid{grid-template-columns:1fr}.ad-top{flex-direction:column;text-align:center}.ad-bottom{flex-direction:column;align-items:center;text-align:center}.ad-contact-block{border-right:none;border-bottom:1px solid rgba(255,255,255,.12);padding:24px 0 20px 0}.ad-logo-block{padding:20px 0 0 0}.ad-logo-block img{margin:0 auto}.table-wrap{display:none}.mobile-results-wrap{display:block}.mi-info-icon:hover::after{left:auto;right:0;transform:none;width:200px}}
 </style>
 </head>
 <body>
@@ -119,6 +152,22 @@ td .sub{font-size:11px;color:#9B9BAF}
 <div class="tabs">
   <button class="tab active" onclick="switchTab('piti')" id="tab-piti">PITI + MI Pricer</button>
   <button class="tab" onclick="switchTab('amort')" id="tab-amort">Amortization Solver</button>
+</div>
+
+<!-- HOW TO USE -->
+<div class="how-to-section">
+  <button class="how-to-toggle" id="how-to-btn" onclick="toggleHowTo()">
+    <span class="arrow">▶</span> How to Use This Calculator
+  </button>
+  <div class="how-to-body hidden" id="how-to-body">
+    <ol>
+      <li><strong>Set your loan defaults</strong> — rate, taxes, insurance, and mortgage insurance are pre-filled with common starting values. Adjust as needed.</li>
+      <li><strong>Enter a purchase price</strong> and down payment in the scenario card. Add up to 5 scenarios to compare side by side.</li>
+      <li><strong>Hit "Calculate PITI"</strong> to see your full monthly payment breakdown: Principal &amp; Interest, Taxes, Insurance, and Mortgage Insurance.</li>
+      <li><strong>Click any Loan amount</strong> in the results to send it over to the Amortization Solver for a full payment schedule.</li>
+    </ol>
+    <div class="tip">Tip: Use the % / $ toggles to switch between percentage-based and flat-dollar inputs for taxes, insurance, and MI.</div>
+  </div>
 </div>
 
 <!-- ══════ PITI TAB ══════ -->
@@ -147,7 +196,7 @@ td .sub{font-size:11px;color:#9B9BAF}
       <div class="field-wrap">
         <label class="field-label small" id="d-ins-label">Insurance (monthly $)</label>
         <div class="default-field-row">
-          <div class="input-wrap small" style="flex:1"><input id="d-ins" value="100"></div>
+          <div class="input-wrap small" style="flex:1"><input id="d-ins" value="150"></div>
           <div class="toggle-wrap">
             <button class="toggle-btn" id="d-ins-pct-btn" onclick="toggleDefault('ins','pct')">%</button>
             <button class="toggle-btn active" id="d-ins-dollar-btn" onclick="toggleDefault('ins','dollar')">$</button>
@@ -156,7 +205,7 @@ td .sub{font-size:11px;color:#9B9BAF}
       </div>
       <!-- MI -->
       <div class="field-wrap">
-        <label class="field-label small" id="d-mi-label">MI (annual % of loan)</label>
+        <label class="field-label small" id="d-mi-label">Mortgage Insurance (annual % of loan) <span class="mi-info-icon" title="This calculator uses FHA MIP pricing by default (0.55% annually for 3.5% down). FHA MIP is required for the life of the loan on most FHA purchases. Conventional MI rates vary by credit score and down payment and may be lower. VA loans do not require mortgage insurance. Contact Dan for a quote specific to your scenario.">ⓘ</span></label>
         <div class="default-field-row">
           <div class="input-wrap small" style="flex:1"><input id="d-mi" value="0.55"></div>
           <div class="toggle-wrap">
@@ -271,18 +320,30 @@ function switchTab(t){
   $('tab-amort').classList.toggle('active',t==='amort');
 }
 
+/* ── How-to toggle ── */
+function toggleHowTo(){
+  const body=$('how-to-body'), btn=$('how-to-btn');
+  body.classList.toggle('hidden');
+  btn.classList.toggle('open');
+}
+
 /* ── Default toggle modes ── */
 let defModes = { tax:'pct', ins:'dollar', mi:'pct' };
 const defLabels = {
   tax:  { pct:'Taxes (annual % of price)', dollar:'Taxes (monthly $)' },
   ins:  { pct:'Insurance (annual % of price)', dollar:'Insurance (monthly $)' },
-  mi:   { pct:'MI (annual % of loan)', dollar:'MI (monthly $)' }
+  mi:   { pct:'Mortgage Insurance (annual % of loan)', dollar:'Mortgage Insurance (monthly $)' }
 };
 function toggleDefault(field, mode){
   defModes[field] = mode;
   $('d-'+field+'-pct-btn').classList.toggle('active', mode==='pct');
   $('d-'+field+'-dollar-btn').classList.toggle('active', mode==='dollar');
-  $('d-'+field+'-label').textContent = defLabels[field][mode];
+  const lbl = $('d-'+field+'-label');
+  if(field==='mi'){
+    lbl.innerHTML = defLabels[field][mode] + ' <span class="mi-info-icon" title="This calculator uses FHA MIP pricing by default (0.55% annually for 3.5% down). FHA MIP is required for the life of the loan on most FHA purchases. Conventional MI rates vary by credit score and down payment and may be lower. VA loans do not require mortgage insurance. Contact Dan for a quote specific to your scenario.">ⓘ</span>';
+  } else {
+    lbl.textContent = defLabels[field][mode];
+  }
   $('piti-results').classList.add('hidden');
 }
 
@@ -312,6 +373,30 @@ function renderScenarios(){
     g.appendChild(card);
     refreshPreview(i);
   });
+  // Ghost card watermark
+  if(scenarios.length<5){
+    const ghost=document.createElement('div');
+    ghost.className='scenario-card-ghost';
+    ghost.onclick=function(){addScenario();};
+    const nextNum=scenarios.length+1;
+    ghost.innerHTML=`
+      <div class="ghost-overlay"><span>+ Add Scenario</span></div>
+      <div class="scenario-header"><span class="scenario-num" style="color:#C0C0CC">#${nextNum}</span></div>
+      <label class="field-label" style="color:#C0C0CC">Purchase Price</label>
+      <div class="input-wrap"><span class="affix" style="color:#D0D0DA">$</span><input value="" placeholder="e.g. 325,000" tabindex="-1"></div>
+      <label class="field-label" style="margin-top:8px;color:#C0C0CC">Down Payment</label>
+      <div class="down-row">
+        <div class="input-wrap" style="flex:1"><input value="" placeholder="20" tabindex="-1"></div>
+        <div class="toggle-wrap">
+          <button class="toggle-btn active" tabindex="-1">%</button>
+          <button class="toggle-btn" tabindex="-1">$</button>
+        </div>
+      </div>
+      <label class="field-label" style="margin-top:8px;color:#C0C0CC">Term (payments)</label>
+      <div class="input-wrap"><input value="" placeholder="360" tabindex="-1"></div>
+    `;
+    g.appendChild(ghost);
+  }
 }
 function refreshPreview(i){
   const sc=scenarios[i], el=$('sc-preview-'+i);
@@ -330,7 +415,7 @@ function removeScenario(i){if(scenarios.length>1){scenarios.splice(i,1);$('piti-
 
 function resetPiti(){
   scenarios=[{price:'',downType:'pct',downValue:'20',term:'360'}];
-  $('d-rate').value='6.875';$('d-tax').value='1.0';$('d-ins').value='100';$('d-mi').value='0.55';
+  $('d-rate').value='6.875';$('d-tax').value='1.0';$('d-ins').value='150';$('d-mi').value='0.55';
   defModes={tax:'pct',ins:'dollar',mi:'pct'};
   toggleDefault('tax','pct');toggleDefault('ins','dollar');toggleDefault('mi','pct');
   $('piti-results').classList.add('hidden');
@@ -351,6 +436,7 @@ function calcPiti(){
   const miVal=pn($('d-mi').value)||0;
 
   let rows='';
+  let mobileCards='';
   scenarios.forEach((sc,i)=>{
     const price=pn(sc.price);
     const n=pn(sc.term)||360;
@@ -384,6 +470,21 @@ function calcPiti(){
       <td>${mMI>0?fmtD(mMI):'<span style="color:#ccc">—</span>'}</td>
       <td class="piti-total">${fmtD(total)}</td>
     </tr>`;
+
+    // Mobile-friendly card
+    mobileCards+=`<div class="mobile-result-card">
+      <div class="mrc-header">Scenario #${i+1}</div>
+      <div class="mrc-total">${fmtD(total)}<span class="mrc-total-label">/mo Total PITI</span></div>
+      <div class="mrc-grid">
+        <div class="mrc-item"><span class="mrc-label">Price</span><span class="mrc-val">${fmtD(price)}</span></div>
+        <div class="mrc-item"><span class="mrc-label">Down</span><span class="mrc-val">${fmtD(dd)} (${dpct.toFixed(1)}%)</span></div>
+        <div class="mrc-item"><span class="mrc-label">Loan</span><span class="mrc-val clickable" onclick="sendToAmort(${loan},${n})">${fmtD(loan)}</span></div>
+        <div class="mrc-item"><span class="mrc-label">P&I</span><span class="mrc-val">${fmtD(pi)}</span></div>
+        <div class="mrc-item"><span class="mrc-label">Taxes</span><span class="mrc-val">${fmtD(mTax)}</span></div>
+        <div class="mrc-item"><span class="mrc-label">Insurance</span><span class="mrc-val">${fmtD(mIns)}</span></div>
+        <div class="mrc-item"><span class="mrc-label">Mortgage Ins.</span><span class="mrc-val">${mMI>0?fmtD(mMI):'—'}</span></div>
+      </div>
+    </div>`;
   });
 
   const el=$('piti-results');
@@ -391,13 +492,15 @@ function calcPiti(){
     <div class="table-wrap"><table>
       <thead><tr>
         <th class="left">Scenario</th><th>Price</th><th>Down</th><th>Loan</th><th>Term</th>
-        <th>P&I</th><th>Taxes</th><th>Insurance</th><th>MI</th><th class="green">Total PITI</th>
+        <th>P&I</th><th>Taxes</th><th>Insurance</th><th>Mortgage Ins.</th><th class="green">Total PITI</th>
       </tr></thead>
       <tbody>${rows}</tbody>
     </table></div>
+    ${mobileCards ? '<div class="mobile-results-wrap">'+mobileCards+'</div>' : ''}
     <div class="result-footnote">Click any Loan amount to send it to the Amortization Solver tab</div>
   </div>`;
   el.classList.remove('hidden');
+  el.scrollIntoView({behavior:'smooth',block:'nearest'});
 }
 
 function sendToAmort(loan,term){
