@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#3D1951">
+<title>Doc Checklist</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRG9jIENoZWNrbGlzdCIsInNob3J0X25hbWUiOiJEb2NMaXN0IiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzNEMTk1MSIsInRoZW1lX2NvbG9yIjoiIzNEMTk1MSIsInN0YXJ0X3VybCI6Ii4ifQ==">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--purple:#3D1951;--purple-light:#5a2d78;--purple-faint:#f3edf7;--green:#3EB049;--green-dark:#2d8a36;--green-faint:#eaf7eb;--bg:#f5f4f6;--card:#fff;--text:#1a1a1a;--text2:#666;--text3:#999;--border:#e8e6ea;--radius:14px}
+html,body{height:100%;font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+input,textarea,select,button{font-family:inherit}
+
+/* Animations */
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.anim{animation:slideUp .35s ease forwards;opacity:0}
+.anim-d1{animation-delay:.05s}.anim-d2{animation-delay:.1s}.anim-d3{animation-delay:.15s}.anim-d4{animation-delay:.2s}.anim-d5{animation-delay:.25s}
+
+/* Layout */
+.app{min-height:100vh;max-width:480px;margin:0 auto;padding:12px 14px env(safe-area-inset-bottom)}
+.header{background:var(--purple);border-radius:var(--radius);padding:22px 20px;margin-bottom:14px;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.04);border-radius:50%}
+.header h1{color:#fff;font-size:22px;font-weight:800;letter-spacing:-.5px}
+.header p{color:rgba(255,255,255,.55);font-size:13px;margin-top:3px}
+
+.card{background:var(--card);border-radius:var(--radius);padding:16px 18px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.card-label{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
+
+.input{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;font-size:15px;outline:none;transition:border-color .2s}
+.input:focus{border-color:var(--purple)}
+.input-sm{font-size:13px;padding:8px 12px}
+.input-mono{font-family:'SF Mono',Menlo,monospace;font-size:12px;letter-spacing:-.3px}
+
+/* Pill buttons */
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{padding:7px 14px;border-radius:10px;border:2px solid var(--border);background:#fff;color:var(--text2);font-size:13.5px;font-weight:500;cursor:pointer;transition:all .15s;user-select:none}
+.pill.on{border-color:var(--purple);background:var(--purple-faint);color:var(--purple);font-weight:700}
+.pill.on-green{border-color:var(--green);background:var(--green-faint);color:var(--green-dark);font-weight:700}
+.pill-half{flex:1;text-align:center}
+
+/* Chip toggles (smaller) */
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{padding:5px 11px;border-radius:20px;border:1.5px solid #ddd;background:#fafafa;color:#777;font-size:12.5px;font-weight:400;cursor:pointer;transition:all .15s;user-select:none}
+.chip.on{border-color:var(--purple);background:var(--purple-faint);color:var(--purple);font-weight:600}
+.chip.on-green{border-color:var(--green);background:var(--green-faint);color:var(--green-dark);font-weight:600}
+.chip-count{font-size:10px;opacity:.65;margin-left:2px}
+
+.group-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin:10px 0 6px;color:var(--purple)}
+.group-label.green{color:var(--green-dark)}
+
+/* Buttons */
+.btn{width:100%;padding:14px;border-radius:var(--radius);border:none;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:-.2px}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:disabled{background:#ccc;cursor:default}
+.btn-purple{background:var(--purple);color:#fff}
+.btn-outline{background:#fff;color:var(--purple);border:1.5px solid var(--purple)}
+.btn-sm{padding:10px;font-size:14px;border-radius:10px}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.25);padding:6px 14px;font-size:12px;border-radius:8px;cursor:pointer}
+
+/* Output view */
+.tab-bar{display:flex;gap:8px;margin-top:12px}
+.tab{flex:1;padding:8px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-align:center;color:#fff;transition:all .15s}
+.tab.on{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4)}
+.tab.off{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+
+.preview{border-radius:16px;padding:16px;font-size:13px;line-height:1.55;white-space:pre-wrap;max-height:50vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.preview-text{background:var(--green-faint);color:var(--text)}
+.preview-doc{background:var(--purple-faint);color:var(--text)}
+
+.section-row{display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid #f5f5f5;font-size:13.5px}
+.section-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+
+/* Settings view */
+.settings-row{margin-bottom:14px}
+.settings-row label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px}
+.settings-row .hint{font-size:11px;color:var(--text3);margin-top:3px}
+
+/* Toast */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--purple);color:#fff;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:600;opacity:0;transition:all .3s ease;z-index:999;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* Gear icon */
+.gear{position:absolute;top:18px;right:16px;cursor:pointer;opacity:.5;transition:opacity .15s}
+.gear:hover{opacity:.8}
+.gear svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8}
+
+.helper{text-align:center;font-size:12px;color:var(--text3);margin-top:8px}
+.spacer{height:40px}
+
+/* Screen transitions */
+.screen{display:none}.screen.active{display:block}
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <!-- SETTINGS SCREEN -->
+  <div class="screen" id="screen-settings">
+    <div class="header anim">
+      <h1>⚙️ Setup</h1>
+      <p>Configure your team info</p>
+    </div>
+
+    <div class="card anim anim-d1">
+      <div class="settings-row">
+        <label>Your Name</label>
+        <input class="input" id="s-name" placeholder="e.g. Dan Duffer">
+      </div>
+      <div class="settings-row">
+        <label>Your Cell Phone</label>
+        <input class="input" id="s-phone" placeholder="e.g. (317) 494-2459">
+      </div>
+      <div class="settings-row">
+        <label>Your Email</label>
+        <input class="input input-sm" id="s-email" placeholder="e.g. dduffer@uhm.com">
+      </div>
+    </div>
+
+    <div class="card anim anim-d2">
+      <div class="card-label">Team Document Intake</div>
+      <div class="settings-row">
+        <label>Team Email (for borrower doc uploads)</label>
+        <input class="input input-sm" id="s-team-email" placeholder="e.g. teamduffer@uhm.com">
+        <div class="hint">Borrowers will be told to email docs here</div>
+      </div>
+      <div class="settings-row">
+        <label>Secure Upload Portal URL (optional)</label>
+        <input class="input input-sm input-mono" id="s-portal" placeholder="https://myuhm.uhm.com/...">
+        <div class="hint">If set, borrowers are told a link is coming after their file is created</div>
+      </div>
+    </div>
+
+    <div class="card anim anim-d3">
+      <div class="card-label">NMLS / Compliance</div>
+      <div class="settings-row">
+        <label>NMLS #</label>
+        <input class="input input-sm" id="s-nmls" placeholder="e.g. 562633">
+      </div>
+      <div class="settings-row">
+        <label>State NMLS #</label>
+        <input class="input input-sm" id="s-state-nmls" placeholder="e.g. 38098">
+      </div>
+      <div class="settings-row">
+        <label>Company Name</label>
+        <input class="input input-sm" id="s-company" placeholder="e.g. Union Home Mortgage Corp.">
+      </div>
+    </div>
+
+    <button class="btn btn-green anim anim-d4" onclick="saveSettings()">Save & Start</button>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- BUILDER SCREEN -->
+  <div class="screen" id="screen-builder">
+    <div class="header anim">
+      <h1>Doc Checklist</h1>
+      <p id="builder-subtitle">From Master Conditions List</p>
+      <div class="gear" onclick="showScreen('settings')" title="Settings">
+        <svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </div>
+    </div>
+
+    <div class="card anim anim-d1">
+      <div class="card-label">Borrower First Name</div>
+      <input class="input" id="b-name" placeholder="e.g. Shane">
+    </div>
+
+    <div class="card anim anim-d2">
+      <div class="card-label">Loan Type</div>
+      <div class="pills" id="loan-pills"></div>
+    </div>
+
+    <div class="card anim anim-d2">
+      <div class="card-label">Transaction Type</div>
+      <div class="pills">
+        <button class="pill pill-half" data-txn="Purchase" onclick="pickTxn(this)">Purchase</button>
+        <button class="pill pill-half" data-txn="Refinance" onclick="pickTxn(this)">Refinance</button>
+      </div>
+    </div>
+
+    <div class="card anim anim-d3" id="conditions-card">
+      <div class="card-label">Condition Sections</div>
+      <div id="conditions-container"></div>
+    </div>
+
+    <button class="btn btn-green anim anim-d4" id="gen-btn" disabled onclick="generate()">Generate Checklist</button>
+    <div class="helper" id="gen-hint">Select loan type and transaction type</div>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- OUTPUT SCREEN -->
+  <div class="screen" id="screen-output">
+    <div class="header anim">
+      <div style="display:flex;justify-content:space-between;align-items:start">
+        <div>
+          <h1 id="out-title">Doc List</h1>
+          <p id="out-subtitle"></p>
+        </div>
+        <button class="btn-ghost" onclick="resetBuilder()">New</button>
+      </div>
+      <div class="tab-bar">
+        <div class="tab on" id="tab-text" onclick="switchTab('text')">📲 Text Msg</div>
+        <div class="tab off" id="tab-doc" onclick="switchTab('doc')">📋 Doc Request</div>
+      </div>
+    </div>
+
+    <div class="card anim anim-d1">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <span style="font-size:13.5px;font-weight:700;color:var(--purple)" id="preview-label">Text Message Preview</span>
+      </div>
+      <div class="preview preview-text" id="preview-box"></div>
+    </div>
+
+    <button class="btn btn-green anim anim-d2" onclick="shareOutput()">
+      <span id="share-btn-label">📲 Text This to Borrower</span>
+    </button>
+    <button class="btn btn-outline btn-sm anim anim-d3" style="margin-top:8px" onclick="toggleRaw()">
+      <span id="raw-toggle-label">Select & Copy Manually</span>
+    </button>
+
+    <div class="card anim" id="raw-card" style="display:none;margin-top:8px">
+      <textarea id="raw-text" readonly style="width:100%;min-height:200px;border:1.5px solid var(--border);border-radius:10px;padding:12px;font-size:13px;line-height:1.5;resize:none;font-family:'DM Sans',system-ui,sans-serif" onfocus="this.select()"></textarea>
+      <button class="btn btn-purple btn-sm" style="margin-top:8px" onclick="copyRaw()">Copy All</button>
+    </div>
+
+    <div class="card anim anim-d4" id="sections-summary">
+      <div class="card-label">Active Sections</div>
+      <div id="sections-list"></div>
+    </div>
+    <div class="spacer"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════════════════════
+// MASTER CONDITIONS (from Chat 4 build)
+// ═══════════════════════════════════════
+const MASTER = {
+  photoid: { title: "Photo ID", items: ["Government-issued photo ID (driver's license or passport) — front and back"] },
+  paystubs: { title: "Pay Stubs", items: ["Two most recent pay stubs covering the last 30 days (all employers)"] },
+  w2: { title: "W-2s", items: ["W-2s for the most recent 2 years (all employers)"] },
+  taxpers: { title: "Personal Tax Returns", items: ["Federal tax returns for the most recent 2 years (all pages, all schedules)"] },
+  bankstmts: { title: "Bank Statements (2 Months)", items: ["Two most recent months of bank statements for all checking and savings accounts (all pages, even blank ones)"] },
+  mtgstmt: { title: "Mortgage Statement", items: ["Most recent mortgage statement for your current home"] },
+  landlord: { title: "Landlord Contact Info", items: ["Landlord name, phone number, and address for current and prior rental (if renting within the past 2 years)"] },
+  se: { title: "Self-Employed Borrowers", items: [
+    "Two most recent years of personal federal tax returns (all pages, all schedules)",
+    "Two most recent years of business tax returns (all pages)",
+    "Year-to-date profit and loss statement (signed and dated)",
+    "Most recent two months of business bank statements (all pages)",
+    "12 months of business bank statements (all pages, all accounts)",
+    "Business license or proof of business existence",
+    "CPA letter confirming business is active and in good standing (if requested)",
+    "K-1 schedules for the most recent 2 years (if applicable)",
+    "IRS transcripts — business and personal (request from irs.gov/get-transcript)",
+    "Schedule C / P&L worksheet"
+  ]},
+  bank12: { title: "Bank Statements — 12 Months", items: [
+    "Most recent 12 months of bank statements for all accounts (all pages)",
+    "Letter of explanation for any large or irregular deposits exceeding 50% of monthly qualifying income",
+    "Source documentation for each large deposit (pay stubs, sale proceeds, gift letters, etc.)"
+  ]},
+  retire: { title: "Retirement & Fixed Income", items: [
+    "Social Security award letter (most recent)",
+    "Pension or annuity award letter or distribution statement",
+    "VA disability benefits letter (if applicable)",
+    "Most recent two months of bank statements showing regular deposits of benefit income",
+    "1099-R forms for the most recent two tax years (if applicable)",
+    "Most recent quarterly 401(k) or retirement account statement",
+    "If income is non-taxable: documentation to support gross-up calculation"
+  ]},
+  rental: { title: "Rental Income / Schedule E", items: [
+    "Most recent two years of federal tax returns showing Schedule E (all pages)",
+    "Signed lease agreements for all rental properties (current)",
+    "Most recent two months of rental property bank statements (if separate account)",
+    "Rental property mortgage statements (most recent) for each property",
+    "Property management agreement (if applicable)",
+    "If property acquired within past year: closing disclosure + executed lease"
+  ]},
+  support: { title: "Child Support / Alimony as Income", items: [
+    "Divorce decree or court order establishing the payment amount and schedule",
+    "12 months of bank statements evidencing consistent receipt of payments",
+    "Documentation that payments will continue for at least 3 years from closing"
+  ]},
+  va: { title: "VA Loans", items: [
+    "VA Certificate of Eligibility (COE)",
+    "DD-214 (all pages) or Statement of Service (if active duty)",
+    "VA disability / funding fee exemption letter (if applicable)"
+  ]},
+  gift: { title: "Gift Funds", items: [
+    "Signed gift letter (donor name, relationship, amount, property address, no repayment expected)",
+    "Donor's bank statement showing the funds were available",
+    "Transfer documentation — wire confirmation, cashier's check, or receiving bank statement"
+  ]},
+  bigdep: { title: "Large Deposit Explanation", items: [
+    "Written letter of explanation for any deposit that cannot be traced through payroll",
+    "Source documentation for each large deposit (sale proceeds, tax refund, gift, etc.)"
+  ]},
+  selling: { title: "Sale of Current Home", items: [
+    "Fully executed purchase agreement for the property being sold",
+    "If already closed: final settlement / closing disclosure from that sale",
+    "If proceeds are funding the new purchase: documentation showing net proceeds received"
+  ]},
+  currenthome: { title: "Current Homeowners", items: [
+    "Most recent mortgage statement for current home",
+    "Current homeowners insurance declarations page",
+    "Most recent property tax bill"
+  ]},
+  condo: { title: "Condo Purchase", items: [
+    "Condo questionnaire (completed by HOA or management company)",
+    "HOA master insurance policy declarations page",
+    "Most recent HOA budget and meeting minutes (if required)",
+    "Confirmation that the project is FHA/VA approved (if applicable)"
+  ]},
+  dpa: { title: "Down Payment Assistance", items: [
+    "Down payment assistance program application and approval documentation",
+    "Program terms showing grant vs. forgivable loan vs. repayable second lien"
+  ]},
+  empgap: { title: "Employment Gaps / Recent Job Change", items: [
+    "Letter of explanation for any employment gaps exceeding 30 days within the past 2 years",
+    "Offer letter or employment verification for new position (if recently started)",
+    "Most recent 30 days of pay stubs from current employer",
+    "If transitioning from W-2 to self-employment: business documentation and income history",
+    "If returning from leave: return-to-work letter from employer"
+  ]},
+  residency: { title: "Residency History", items: [
+    "Prior address(es) for the past 2 years with dates of residence",
+    "Landlord contact information for current and prior rental(s)",
+    "Rent payment history (12 months of canceled checks or bank statements)",
+    "If living rent-free: letter from housing provider confirming arrangement"
+  ]},
+  divorce: { title: "Divorce", items: [
+    "Final divorce decree (all pages, signed by judge)",
+    "Property settlement agreement / marital settlement agreement",
+    "If divorce is pending: separation agreement and filed petition",
+    "Quit claim deed or documentation showing disposition of marital property (if applicable)",
+    "If paying alimony/child support: court order showing obligation amounts and duration"
+  ]},
+  bk: { title: "Bankruptcy", items: [
+    "Bankruptcy petition and schedules (all pages)",
+    "Discharge order from the court",
+    "Letter of explanation describing circumstances leading to bankruptcy",
+    "Evidence of re-established credit since discharge",
+    "If Chapter 13: court trustee payment history and court approval for new mortgage"
+  ]},
+  noncit: { title: "Non-Citizen / Immigration Status", items: [
+    "Permanent Resident Card (Green Card) — front and back copy",
+    "Valid work visa / Employment Authorization Document (EAD) — if non-permanent resident",
+    "Valid passport", "Social Security card",
+    "If visa status: documentation showing valid status through closing"
+  ]},
+  poa: { title: "Power of Attorney", items: [
+    "Full copy of the Power of Attorney document",
+    "Note: POA typically requires lender pre-approval before closing"
+  ]},
+  idr: { title: "Student Loans — IBR / Deferment", items: [
+    "Documentation of income-based repayment (IBR) amount",
+    "Or: statement confirming deferment end date"
+  ]},
+  creditinq: { title: "Credit Inquiries", items: [
+    "Letter of explanation for each credit inquiry within the past 120 days",
+    "If new account was opened: most recent statement showing balance and payment"
+  ]},
+  fraud: { title: "Fraud Alert / Credit Freeze", items: [
+    "Written explanation addressing fraud alerts or security freezes on credit report",
+    "Copies of any identity theft reports (if relevant)",
+    "Confirmation that freeze has been lifted for lender to pull credit"
+  ]},
+  fhamanual: { title: "FHA Manual Underwrite", items: [
+    "Letter of explanation for EVERY derogatory credit event (one LOE per event)",
+    "12 months of rent payment history — VOR from landlord, canceled checks, or bank statements",
+    "12 months of utility payment history (electric, gas, water, phone — at least 2 accounts)",
+    "Non-traditional credit references if thin file (12 months payment history for recurring bills)",
+    "Documentation of at least TWO compensating factors: verified reserves (3+ months PITI), minimal payment shock, long employment history, or additional income not used for qualifying"
+  ]}
+};
+
+const LOAN_TYPES = ["FHA","Conventional","VA","USDA","Non-QM"];
+const DEFAULT_SITS = ["photoid","paystubs","w2","taxpers","bankstmts"];
+const PURCHASE_ITEMS = ["Fully executed purchase agreement (when you have one)","Proof of earnest money deposit","Homeowners insurance quote or binder for the new property"];
+const REFI_ITEMS = ["Most recent mortgage statement","Current homeowners insurance declarations page","Most recent property tax bill"];
+
+const SITUATIONS = [
+  {id:"photoid",label:"Photo ID",group:"Standard Documents",grpColor:"green"},
+  {id:"paystubs",label:"Pay Stubs (30 days)",group:"Standard Documents",grpColor:"green"},
+  {id:"w2",label:"W-2s (2 years)",group:"Standard Documents",grpColor:"green"},
+  {id:"taxpers",label:"Tax Returns (2 yr)",group:"Standard Documents",grpColor:"green"},
+  {id:"bankstmts",label:"Bank Stmts (2 mo)",group:"Standard Documents",grpColor:"green"},
+  {id:"mtgstmt",label:"Mortgage Statement",group:"Standard Documents",grpColor:"green"},
+  {id:"landlord",label:"Landlord Contact",group:"Standard Documents",grpColor:"green"},
+  {id:"se",label:"Self-Employed",group:"Income Type"},
+  {id:"bank12",label:"Bank Stmts — 12 Mo.",group:"Income Type"},
+  {id:"retire",label:"Retirement & Fixed Income",group:"Income Type"},
+  {id:"rental",label:"Rental Income / Sched E",group:"Income Type"},
+  {id:"support",label:"Child Support / Alimony",group:"Income Type"},
+  {id:"va",label:"VA Loan",group:"Income Type"},
+  {id:"gift",label:"Gift Funds",group:"Assets & Property"},
+  {id:"bigdep",label:"Large Deposit LOE",group:"Assets & Property"},
+  {id:"selling",label:"Sale of Current Home",group:"Assets & Property"},
+  {id:"currenthome",label:"Current Homeowners",group:"Assets & Property"},
+  {id:"condo",label:"Condo Purchase",group:"Assets & Property"},
+  {id:"dpa",label:"Down Payment Assistance",group:"Assets & Property"},
+  {id:"empgap",label:"Employment Gaps",group:"Borrower Background"},
+  {id:"residency",label:"Residency History",group:"Borrower Background"},
+  {id:"divorce",label:"Divorce",group:"Borrower Background"},
+  {id:"bk",label:"Bankruptcy",group:"Borrower Background"},
+  {id:"noncit",label:"Non-Citizen",group:"Borrower Background"},
+  {id:"poa",label:"Power of Attorney",group:"Borrower Background"},
+  {id:"idr",label:"Student Loans — IBR",group:"Borrower Background"},
+  {id:"creditinq",label:"Credit Inquiries",group:"Borrower Background"},
+  {id:"fraud",label:"Fraud Alert / Freeze",group:"Borrower Background"},
+  {id:"fhamanual",label:"FHA Manual UW",group:"Loan-Specific"}
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let state = {
+  loan: '', txn: '', sits: [...DEFAULT_SITS], borrowerName: '',
+  tab: 'text', rawOpen: false
+};
+let settings = {};
+
+// ═══════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════
+function loadSettings() {
+  try { settings = JSON.parse(localStorage.getItem('docchecklist_settings') || '{}'); } catch(e) { settings = {}; }
+  return settings.name ? true : false;
+}
+
+function saveSettings() {
+  settings = {
+    name: el('s-name').value.trim(),
+    phone: el('s-phone').value.trim(),
+    email: el('s-email').value.trim(),
+    teamEmail: el('s-team-email').value.trim(),
+    portal: el('s-portal').value.trim(),
+    nmls: el('s-nmls').value.trim(),
+    stateNmls: el('s-state-nmls').value.trim(),
+    company: el('s-company').value.trim()
+  };
+  if (!settings.name) { toast('Enter your name'); return; }
+  if (!settings.teamEmail) { toast('Enter a team email for doc intake'); return; }
+  localStorage.setItem('docchecklist_settings', JSON.stringify(settings));
+  toast('Settings saved');
+  showScreen('builder');
+}
+
+function populateSettingsForm() {
+  el('s-name').value = settings.name || '';
+  el('s-phone').value = settings.phone || '';
+  el('s-email').value = settings.email || '';
+  el('s-team-email').value = settings.teamEmail || '';
+  el('s-portal').value = settings.portal || '';
+  el('s-nmls').value = settings.nmls || '';
+  el('s-state-nmls').value = settings.stateNmls || '';
+  el('s-company').value = settings.company || '';
+}
+
+// ═══════════════════════════════════════
+// BUILDER
+// ═══════════════════════════════════════
+function buildLoanPills() {
+  const c = el('loan-pills');
+  c.innerHTML = LOAN_TYPES.map(lt =>
+    `<button class="pill" data-loan="${lt}" onclick="pickLoan(this)">${lt}</button>`
+  ).join('');
+}
+
+function buildConditions() {
+  const c = el('conditions-container');
+  const groups = {};
+  const vis = SITUATIONS.filter(s => {
+    if (s.id === 'fhamanual' && state.loan !== 'FHA') return false;
+    if (s.id === 'va' && state.loan !== 'VA') return false;
+    return true;
+  });
+  vis.forEach(s => { if (!groups[s.group]) groups[s.group] = { items: [], color: s.grpColor }; groups[s.group].items.push(s); });
+
+  let html = '';
+  for (const [g, data] of Object.entries(groups)) {
+    const isGreen = data.color === 'green';
+    html += `<div class="group-label ${isGreen ? 'green' : ''}">${g}</div><div class="chips">`;
+    data.items.forEach(s => {
+      const on = state.sits.includes(s.id);
+      const n = MASTER[s.id] ? MASTER[s.id].items.length : 0;
+      const cls = on ? (isGreen ? 'chip on-green' : 'chip on') : 'chip';
+      html += `<button class="${cls}" data-sit="${s.id}" onclick="toggleSit(this)">${on ? '✓ ' : ''}${s.label}${n > 1 ? '<span class=chip-count>(' + n + ')</span>' : ''}</button>`;
+    });
+    html += '</div>';
+  }
+  c.innerHTML = html;
+}
+
+function pickLoan(btn) {
+  state.loan = btn.dataset.loan;
+  document.querySelectorAll('[data-loan]').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  buildConditions();
+  checkReady();
+}
+
+function pickTxn(btn) {
+  state.txn = btn.dataset.txn;
+  document.querySelectorAll('[data-txn]').forEach(b => b.classList.remove('on','on-green'));
+  btn.classList.add('on-green');
+  checkReady();
+}
+
+function toggleSit(btn) {
+  const id = btn.dataset.sit;
+  const idx = state.sits.indexOf(id);
+  if (idx > -1) state.sits.splice(idx, 1); else state.sits.push(id);
+  buildConditions();
+}
+
+function checkReady() {
+  const ready = state.loan && state.txn;
+  el('gen-btn').disabled = !ready;
+  el('gen-hint').style.display = ready ? 'none' : 'block';
+}
+
+// ═══════════════════════════════════════
+// GENERATE OUTPUT
+// ═══════════════════════════════════════
+function generate() {
+  state.borrowerName = el('b-name').value.trim();
+  state.tab = 'text';
+  state.rawOpen = false;
+  showScreen('output');
+  renderOutput();
+}
+
+function makeTextMsg() {
+  const items = [];
+  state.sits.forEach(id => {
+    if (MASTER[id]) MASTER[id].items.forEach(t => { if (!t.startsWith('Note:')) items.push(t); });
+  });
+  if (state.txn === 'Purchase') items.push(...PURCHASE_ITEMS);
+  if (state.txn === 'Refinance') items.push(...REFI_ITEMS);
+
+  const name = state.borrowerName;
+  let msg = name ? `Hey ${name}! Great chatting with you. Here's what we'll need to get your loan moving:\n\n` :
+    `Hey! Great chatting with you. Here's what we'll need to get your loan moving:\n\n`;
+  msg += items.map(i => `• ${i}`).join('\n');
+  msg += `\n\nFor now, go ahead and email whatever you have to: ${settings.teamEmail}`;
+  if (settings.portal) {
+    msg += `\n\nWe're setting up your file now — once it's ready, we'll send you a secure upload link where you can upload everything directly. Way easier than email for the bigger stuff.`;
+  }
+  msg += `\n\nNo rush on all of it at once — send what you have and we'll check things off as we go!`;
+  msg += `\n\n— ${settings.name}`;
+  if (settings.phone) msg += `\n${settings.phone}`;
+  return msg;
+}
+
+function makeDocReq() {
+  const std = ["photoid","paystubs","w2","taxpers","bankstmts","mtgstmt","landlord"];
+  const activeStd = std.filter(id => state.sits.includes(id));
+  const cond = state.sits.filter(id => !std.includes(id) && MASTER[id]);
+
+  let out = '';
+  if (activeStd.length) {
+    out += 'DOCUMENTS NEEDED FROM EVERYONE\n';
+    activeStd.forEach(id => MASTER[id].items.forEach(t => out += `- ${t}\n`));
+  }
+  if (cond.length) {
+    out += '\nADDITIONAL ITEMS SPECIFIC TO YOUR LOAN\n';
+    cond.forEach(id => { out += `\n${MASTER[id].title}\n`; MASTER[id].items.forEach(t => out += `- ${t}\n`); });
+  }
+  return out.trim();
+}
+
+function renderOutput() {
+  const name = state.borrowerName;
+  el('out-title').textContent = name ? `${name}'s Docs` : 'Doc List';
+  el('out-subtitle').textContent = `${state.loan} ${state.txn} — ${state.sits.filter(id => MASTER[id]).length} sections`;
+
+  const isText = state.tab === 'text';
+  el('tab-text').className = `tab ${isText ? 'on' : 'off'}`;
+  el('tab-doc').className = `tab ${isText ? 'off' : 'on'}`;
+  el('preview-label').textContent = isText ? 'Text Message Preview' : 'Doc Request — Additional Items';
+  el('share-btn-label').textContent = isText ? '📲 Text This to Borrower' : '📋 Share Doc Request';
+
+  const content = isText ? makeTextMsg() : makeDocReq();
+  const box = el('preview-box');
+  box.textContent = content;
+  box.className = `preview ${isText ? 'preview-text' : 'preview-doc'}`;
+  el('raw-text').value = content;
+
+  // Sections summary
+  const list = el('sections-list');
+  list.innerHTML = state.sits.filter(id => MASTER[id]).map(id =>
+    `<div class="section-row"><div class="section-dot"></div><span style="flex:1">${MASTER[id].title}</span><span style="font-size:12px;color:var(--text3)">${MASTER[id].items.length}</span></div>`
+  ).join('');
+
+  el('raw-card').style.display = state.rawOpen ? 'block' : 'none';
+  el('raw-toggle-label').textContent = state.rawOpen ? 'Hide' : 'Select & Copy Manually';
+}
+
+function switchTab(t) {
+  state.tab = t;
+  state.rawOpen = false;
+  renderOutput();
+}
+
+function toggleRaw() {
+  state.rawOpen = !state.rawOpen;
+  renderOutput();
+  if (state.rawOpen) setTimeout(() => el('raw-text').focus(), 100);
+}
+
+async function shareOutput() {
+  const content = state.tab === 'text' ? makeTextMsg() : makeDocReq();
+  if (navigator.share) {
+    try { await navigator.share({ text: content }); toast('Shared!'); } catch(e) { if (e.name !== 'AbortError') { state.rawOpen = true; renderOutput(); } }
+  } else {
+    state.rawOpen = true;
+    renderOutput();
+  }
+}
+
+function copyRaw() {
+  const ta = el('raw-text');
+  ta.select();
+  ta.setSelectionRange(0, 99999);
+  document.execCommand('copy');
+  toast('Copied!');
+}
+
+function resetBuilder() {
+  state = { loan: '', txn: '', sits: [...DEFAULT_SITS], borrowerName: '', tab: 'text', rawOpen: false };
+  showScreen('builder');
+  buildLoanPills();
+  buildConditions();
+  document.querySelectorAll('[data-txn]').forEach(b => b.classList.remove('on','on-green'));
+  el('b-name').value = '';
+  el('gen-btn').disabled = true;
+  el('gen-hint').style.display = 'block';
+}
+
+// ═══════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  el('screen-' + name).classList.add('active');
+  window.scrollTo(0, 0);
+  if (name === 'settings') populateSettingsForm();
+  if (name === 'builder') {
+    el('builder-subtitle').textContent = settings.name ? `${settings.name} • Master Conditions` : 'Master Conditions List';
+  }
+}
+
+// ═══════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════
+function el(id) { return document.getElementById(id); }
+function toast(msg) {
+  const t = el('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1800);
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+(function init() {
+  const hasSettings = loadSettings();
+  buildLoanPills();
+  buildConditions();
+  showScreen(hasSettings ? 'builder' : 'settings');
+})();
+</script>
+</body>
+</html>
