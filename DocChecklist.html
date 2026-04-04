@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#3D1951">
+<title>Doc Checklist</title>
+<link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiRG9jIENoZWNrbGlzdCIsInNob3J0X25hbWUiOiJEb2NMaXN0IiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiIzNEMTk1MSIsInRoZW1lX2NvbG9yIjoiIzNEMTk1MSIsInN0YXJ0X3VybCI6Ii4ifQ==">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,500;0,9..40,700;0,9..40,800;1,9..40,400&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{--purple:#3D1951;--purple-light:#5a2d78;--purple-faint:#f3edf7;--green:#3EB049;--green-dark:#2d8a36;--green-faint:#eaf7eb;--bg:#f5f4f6;--card:#fff;--text:#1a1a1a;--text2:#666;--text3:#999;--border:#e8e6ea;--radius:14px}
+html,body{height:100%;font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+input,textarea,select,button{font-family:inherit}
+@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.anim{animation:slideUp .35s ease forwards;opacity:0}
+.anim-d1{animation-delay:.05s}.anim-d2{animation-delay:.1s}.anim-d3{animation-delay:.15s}.anim-d4{animation-delay:.2s}.anim-d5{animation-delay:.25s}
+.app{min-height:100vh;max-width:480px;margin:0 auto;padding:12px 14px env(safe-area-inset-bottom)}
+.header{background:var(--purple);border-radius:var(--radius);padding:22px 20px;margin-bottom:14px;position:relative;overflow:hidden}
+.header::after{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:rgba(255,255,255,.04);border-radius:50%}
+.header h1{color:#fff;font-size:22px;font-weight:800;letter-spacing:-.5px}
+.header p{color:rgba(255,255,255,.55);font-size:13px;margin-top:3px}
+.card{background:var(--card);border-radius:var(--radius);padding:16px 18px;margin-bottom:10px;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+.card-label{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.7px;margin-bottom:8px}
+.input{width:100%;border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;font-size:15px;outline:none;transition:border-color .2s}
+.input:focus{border-color:var(--purple)}
+.input-sm{font-size:13px;padding:8px 12px}
+.pills{display:flex;flex-wrap:wrap;gap:6px}
+.pill{padding:7px 14px;border-radius:10px;border:2px solid var(--border);background:#fff;color:var(--text2);font-size:13.5px;font-weight:500;cursor:pointer;transition:all .15s;user-select:none}
+.pill.on{border-color:var(--purple);background:var(--purple-faint);color:var(--purple);font-weight:700}
+.pill.on-green{border-color:var(--green);background:var(--green-faint);color:var(--green-dark);font-weight:700}
+.pill-half{flex:1;text-align:center}
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{padding:5px 11px;border-radius:20px;border:1.5px solid #ddd;background:#fafafa;color:#777;font-size:12.5px;font-weight:400;cursor:pointer;transition:all .15s;user-select:none}
+.chip.on{border-color:var(--purple);background:var(--purple-faint);color:var(--purple);font-weight:600}
+.chip.on-green{border-color:var(--green);background:var(--green-faint);color:var(--green-dark);font-weight:600}
+.chip-count{font-size:10px;opacity:.65;margin-left:2px}
+.group-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;margin:10px 0 6px;color:var(--purple)}
+.group-label.green{color:var(--green-dark)}
+.btn{width:100%;padding:14px;border-radius:var(--radius);border:none;font-size:16px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:-.2px}
+.btn-green{background:var(--green);color:#fff}
+.btn-green:disabled{background:#ccc;cursor:default}
+.btn-purple{background:var(--purple);color:#fff}
+.btn-outline{background:#fff;color:var(--purple);border:1.5px solid var(--purple)}
+.btn-sm{padding:10px;font-size:14px;border-radius:10px}
+.btn-ghost{background:transparent;color:rgba(255,255,255,.7);border:1px solid rgba(255,255,255,.25);padding:6px 14px;font-size:12px;border-radius:8px;cursor:pointer}
+.tab-bar{display:flex;gap:8px;margin-top:12px}
+.tab{flex:1;padding:8px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-align:center;color:#fff;transition:all .15s}
+.tab.on{background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.4)}
+.tab.off{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.preview{border-radius:16px;padding:16px;font-size:13px;line-height:1.55;white-space:pre-wrap;max-height:50vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.preview-text{background:var(--green-faint);color:var(--text)}
+.preview-doc{background:var(--purple-faint);color:var(--text)}
+.section-row{display:flex;align-items:center;gap:8px;padding:9px 16px;border-bottom:1px solid #f5f5f5;font-size:13.5px}
+.section-dot{width:6px;height:6px;border-radius:50%;background:var(--green);flex-shrink:0}
+.settings-row{margin-bottom:14px}
+.settings-row label{display:block;font-size:12px;font-weight:600;color:var(--text2);margin-bottom:5px}
+.settings-row .hint{font-size:11px;color:var(--text3);margin-top:3px}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--purple);color:#fff;padding:10px 22px;border-radius:24px;font-size:13px;font-weight:600;opacity:0;transition:all .3s ease;z-index:999;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+.gear{position:absolute;top:18px;right:16px;cursor:pointer;opacity:.5;transition:opacity .15s;z-index:2}
+.gear:hover{opacity:.8}
+.gear svg{width:22px;height:22px;fill:none;stroke:#fff;stroke-width:1.8}
+.helper{text-align:center;font-size:12px;color:var(--text3);margin-top:8px}
+.spacer{height:40px}
+.screen{display:none}.screen.active{display:block}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+  <!-- SETTINGS -->
+  <div class="screen" id="screen-settings">
+    <div class="header anim"><h1>⚙️ Setup</h1><p>Configure your team info</p></div>
+    <div class="card anim anim-d1">
+      <div class="settings-row"><label>Your Name</label><input class="input" id="s-name" placeholder="e.g. Dan Duffer"></div>
+      <div class="settings-row"><label>Your Cell Phone</label><input class="input" id="s-phone" placeholder="e.g. (317) 494-2459"></div>
+      <div class="settings-row"><label>Your Email</label><input class="input input-sm" id="s-email" placeholder="e.g. dduffer@uhm.com"></div>
+      <div class="settings-row"><label>Team / Company Name (for text signature)</label><input class="input input-sm" id="s-team-name" placeholder="e.g. Duffer Mortgage Team"></div>
+    </div>
+    <div class="card anim anim-d2">
+      <div class="card-label">Team Document Intake</div>
+      <div class="settings-row"><label>Team Email (for borrower doc uploads)</label><input class="input input-sm" id="s-team-email" placeholder="e.g. teamduffer@uhm.com"><div class="hint">Borrowers will be told to email docs here</div></div>
+      <div class="settings-row"><label>Application URL (link to apply or download app)</label><input class="input input-sm" id="s-app-url" placeholder="https://myuhm.uhm.com/..." style="font-family:monospace;font-size:12px"><div class="hint">Used when you toggle "Application Invite" to send borrowers a link to start their application</div></div>
+    </div>
+    <div class="card anim anim-d3">
+      <div class="card-label">NMLS / Compliance</div>
+      <div class="settings-row"><label>NMLS #</label><input class="input input-sm" id="s-nmls" placeholder="e.g. 562633"></div>
+      <div class="settings-row"><label>State NMLS #</label><input class="input input-sm" id="s-state-nmls" placeholder="e.g. 38098"></div>
+      <div class="settings-row"><label>Company Name</label><input class="input input-sm" id="s-company" placeholder="e.g. Union Home Mortgage Corp."></div>
+    </div>
+    <button class="btn btn-green anim anim-d4" onclick="saveSettings()">Save & Start</button>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- BUILDER -->
+  <div class="screen" id="screen-builder">
+    <div class="header anim">
+      <h1 id="builder-title">Document Checklist</h1><p id="builder-subtitle"></p>
+      <div class="gear" onclick="showScreen('settings')" title="Settings"><svg viewBox="0 0 24 24"><path d="M12 15a3 3 0 100-6 3 3 0 000 6z"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div>
+    </div>
+    <div class="card anim anim-d1"><div class="card-label">Borrower First Name</div><input class="input" id="b-name" placeholder="e.g. Shane"></div>
+    <div class="card anim anim-d3" id="conditions-card"><div class="card-label">Condition Sections</div><div id="conditions-container"></div></div>
+    <button class="btn btn-green anim anim-d4" id="gen-btn" onclick="generate()">Generate Checklist</button>
+    <div class="spacer"></div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="screen" id="screen-output">
+    <div class="header anim">
+      <div style="display:flex;justify-content:space-between;align-items:start"><div><h1 id="out-title">Doc List</h1><p id="out-subtitle"></p></div><button class="btn-ghost" onclick="resetBuilder()">New</button></div>
+      <div class="tab-bar"><div class="tab on" id="tab-text" onclick="switchTab('text')">📲 Text Msg</div><div class="tab off" id="tab-doc" onclick="switchTab('doc')">📋 Doc Request</div></div>
+    </div>
+    <div class="card anim anim-d1"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><span style="font-size:13.5px;font-weight:700;color:var(--purple)" id="preview-label">Text Message Preview</span></div><div class="preview preview-text" id="preview-box"></div></div>
+    <button class="btn btn-green anim anim-d2" onclick="shareOutput()"><span id="share-btn-label">📲 Text This to Borrower</span></button>
+    <button class="btn btn-outline btn-sm anim anim-d3" style="margin-top:8px" onclick="toggleRaw()"><span id="raw-toggle-label">Select & Copy Manually</span></button>
+    <div class="card anim" id="raw-card" style="display:none;margin-top:8px"><textarea id="raw-text" readonly style="width:100%;min-height:200px;border:1.5px solid var(--border);border-radius:10px;padding:12px;font-size:13px;line-height:1.5;resize:none;font-family:'DM Sans',system-ui,sans-serif" onfocus="this.select()"></textarea><button class="btn btn-purple btn-sm" style="margin-top:8px" onclick="copyRaw()">Copy All</button></div>
+    <div class="card anim anim-d4" id="sections-summary"><div class="card-label">Active Sections</div><div id="sections-list"></div></div>
+    <div class="spacer"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+// Dynamic year helpers
+const NOW = new Date();
+const PY1 = NOW.getFullYear() - 1; // last full year (2025)
+const PY2 = NOW.getFullYear() - 2; // year before that (2024)
+
+// ═══════════════════════════════════════
+// MASTER CONDITIONS — confirmed walkthrough
+// ═══════════════════════════════════════
+const MASTER = {
+  // ── STANDARD DOCUMENTS ──
+  photoid: { title: "Photo ID", items: [
+    "Government-issued photo ID"
+  ]},
+  paystubs: { title: "Pay Stubs", items: [
+    "Most recent 30 days of pay stubs (all employers)"
+  ]},
+  w2: { title: "W-2s", items: [
+    `W-2s for ${PY1} and ${PY2} (all employers)`
+  ]},
+  yearend_stubs: { title: "Year-End Pay Stubs", items: [
+    `Year-end pay stubs for ${PY1} and ${PY2}`
+  ]},
+  hr_contact: { title: "HR Contact", items: [
+    "HR contact name, phone number, and email for each employer (for verification of employment)"
+  ]},
+  realtor: { title: "Realtor Info", items: [
+    "Your real estate agent's name, phone number, and email"
+  ]},
+  app_invite: { title: "Application Invite", items: []},
+
+  // ── INCOME — SOLE PROP / 1099 ──
+  se_schedc: { title: "Self-Employed — Sole Prop / 1099 (Schedule C)", items: [
+    `Personal federal tax returns for ${PY1} and ${PY2} (all pages, all schedules)`,
+    `IRS transcripts for ${PY1} and ${PY2}`,
+    `1099s for ${PY1} and ${PY2} (if applicable)`,
+    "Year-to-date profit and loss statement",
+    "Year-to-date balance sheet",
+    "12 months of bank statements for the revenue generating or holding account"
+  ]},
+
+  // ── INCOME — S-CORP / PARTNERSHIP / LLC ──
+  se_entity: { title: "Self-Employed — S-Corp / Partnership / LLC (1120S or 1065)", items: [
+    `Personal federal tax returns for ${PY1} and ${PY2} (all pages, all schedules)`,
+    `Business tax returns (1120S or 1065) for ${PY1} and ${PY2} (all pages)`,
+    `K-1s for ${PY1} and ${PY2}`,
+    `W-2s from the business for ${PY1} and ${PY2} (if applicable)`,
+    "Most recent 30 days of pay stubs (if applicable)",
+    `IRS transcripts — personal and business — for ${PY1} and ${PY2}`,
+    "Year-to-date profit and loss statement",
+    "Year-to-date balance sheet",
+    "12 months of business bank statements"
+  ]},
+
+  // ── RETIREMENT & FIXED INCOME ──
+  retire: { title: "Retirement & Fixed Income", items: [
+    "Social Security award letter (SSA) — or SSA-1099",
+    "Pension or annuity award letter or distribution statement",
+    "VA disability award letter (if applicable)",
+    `1099-R for ${PY1} and ${PY2} (if applicable)`,
+    `Most recent federal tax return (all pages, all schedules)`,
+    "Most recent 2 months of bank statements showing regular deposits of benefit income",
+    "Most recent retirement account statement(s) — 401(k), IRA, TSP, Roth, etc."
+  ]},
+
+  // ── RENTAL INCOME ──
+  rental: { title: "Rental Income / Schedule E", items: [
+    `Federal tax returns for ${PY1} and ${PY2} showing Schedule E (all pages)`,
+    "Complete list of all real estate owned (address, property type, market value, mortgage balance, monthly payment, rental income, occupancy status)",
+    "Signed lease agreements for all rental properties (current)",
+    "Most recent mortgage statement for each property owned",
+    "Homeowners insurance for each rental property (the page showing coverage amounts and premium)",
+    "Property management agreement (if applicable)",
+    "If property acquired within the past year: closing disclosure + executed lease"
+  ]},
+
+  // ── CHILD SUPPORT / ALIMONY ──
+  support: { title: "Child Support / Alimony as Income", items: [
+    "Divorce decree or court order establishing payment amount, schedule, and duration (documents children's dates of birth for continuance calculation)",
+    "12 months of bank statements or canceled checks evidencing consistent receipt of payments",
+    "If alimony: documentation of duration/expiration from the decree"
+  ]},
+
+  // ── VA LOAN ──
+  va: { title: "VA Loan", items: [
+    "DD-214 (all pages) — if separated/discharged",
+    "Statement of Service — if active duty",
+    "VA disability award letter (if applicable)"
+  ]},
+
+  // ── GIFT FUNDS ──
+  gift: { title: "Gift Funds", items: [
+    "Gift donor's full name, relationship to borrower, phone number, and email"
+  ]},
+
+  // ── RETAINED PROPERTY ──
+  retained: { title: "Retained Property", items: [
+    "Most recent mortgage statement for the retained property",
+    "Home equity loan or second mortgage statement, if you have one",
+    "Current homeowners insurance policy (the page showing coverage amounts and premium)"
+  ]},
+
+  // ── RETAINED PROPERTY — RENTING OUT ──
+  retained_rent: { title: "Retained Property — Renting Out", items: [
+    "Most recent mortgage statement for the retained property",
+    "Home equity loan or second mortgage statement, if you have one",
+    "Current homeowners insurance policy (the page showing coverage amounts and premium)",
+    "Signed lease agreement with tenant",
+    "Copy of security deposit and first month's rent with proof they were deposited into your account"
+  ]},
+
+  // ── RETIREMENT ACCOUNTS (ASSETS) ──
+  retire_acct: { title: "Retirement Accounts", items: [
+    "Most recent statement for all retirement accounts — 401(k), IRA, TSP, Roth, etc. — showing vested balance"
+  ]},
+
+  // ── RETIREMENT PLAN DOCUMENTS ──
+  retire_plan: { title: "Retirement Plan Documents", items: [
+    "Plan summary or plan documents showing withdrawal and loan provisions",
+    "Terms of hardship withdrawal or loan eligibility"
+  ]},
+
+  // ── STOCKS / BONDS / BROKERAGE ──
+  brokerage: { title: "Stocks / Bonds / Brokerage Accounts", items: [
+    "Most recent account statement showing current value"
+  ]},
+
+  // ── TRUST FUNDS ──
+  trust: { title: "Trust Funds", items: [
+    "Trust agreement",
+    "Most recent account statement"
+  ]},
+
+  // ── PROCEEDS FROM SALE OF PERSONAL PROPERTY ──
+  sale_asset: { title: "Proceeds from Sale of Personal Property", items: [
+    "Bill of sale",
+    "Proof of deposit into borrower's account"
+  ]},
+
+  // ── RESIDENCY HISTORY ──
+  residency: { title: "Residency History", items: [
+    "2-year history of addresses with dates of residence",
+    "Landlord name and contact information for each rental (if applicable)",
+    "12 months of rent payment history — canceled checks or bank statements showing payments (if applicable)"
+  ]},
+
+  // ── DIVORCE — FINAL ──
+  divorce_final: { title: "Divorce — Final", items: [
+    "Divorce decree (all pages)",
+    "Child support worksheets or arrangements"
+  ]},
+
+  // ── DIVORCE — IN PROCESS ──
+  divorce_pending: { title: "Divorce — In Process", items: [
+    "Provisional orders (all pages)",
+    "Child support worksheets or arrangements (if established)"
+  ]},
+
+  // ── BANKRUPTCY ──
+  bk: { title: "Bankruptcy", items: [
+    "Bankruptcy discharge papers (all pages)"
+  ]},
+
+  // ── EMPLOYMENT HISTORY ──
+  emp_history: { title: "Employment History", items: [
+    "Resume or work history covering the last 3 years — employer names, dates, positions, and contact information for someone who can complete a verification of employment"
+  ]},
+
+  // ── CREDIT FREEZE ──
+  credit_freeze: { title: "Credit Freeze", items: [
+    "Before we can pull your credit, you'll need to lift your freeze at all 3 bureaus. It's free and takes just a few minutes at each one:",
+    "Equifax — equifax.com/personal/credit-report-services/credit-freeze",
+    "Experian — experian.com/freeze/center.html",
+    "TransUnion — transunion.com/credit-freeze",
+    "Please let us know once all three have been lifted"
+  ]},
+
+  // ── NON-CITIZEN / IMMIGRATION ──
+  noncit: { title: "Non-Citizen / Immigration", items: [
+    "Permanent Resident Card (Green Card) — front and back",
+    "Valid work visa or Employment Authorization Document (if not a permanent resident)",
+    "Valid passport"
+  ]}
+};
+
+const DEFAULT_SITS = ["photoid","paystubs","w2","yearend_stubs","hr_contact"];
+
+const SITUATIONS = [
+  // STANDARD
+  {id:"photoid",label:"Photo ID",group:"Standard Documents",grpColor:"green"},
+  {id:"paystubs",label:"Pay Stubs (30 days)",group:"Standard Documents",grpColor:"green"},
+  {id:"w2",label:`W-2s (${PY1}/${PY2})`,group:"Standard Documents",grpColor:"green"},
+  {id:"yearend_stubs",label:`Year-End Stubs (${PY1}/${PY2})`,group:"Standard Documents",grpColor:"green"},
+  {id:"hr_contact",label:"HR Contact Info",group:"Standard Documents",grpColor:"green"},
+  {id:"realtor",label:"Realtor Info",group:"Standard Documents",grpColor:"green"},
+  {id:"app_invite",label:"Application Invite",group:"Standard Documents",grpColor:"green"},
+  // INCOME
+  {id:"se_schedc",label:"Sole Prop / 1099",group:"Income Type"},
+  {id:"se_entity",label:"S-Corp / Partnership / LLC",group:"Income Type"},
+  {id:"retire",label:"Retirement & Fixed Income",group:"Income Type"},
+  {id:"rental",label:"Rental Income / Sched E",group:"Income Type"},
+  {id:"support",label:"Child Support / Alimony",group:"Income Type"},
+  {id:"va",label:"VA Loan",group:"Income Type"},
+  // ASSETS & PROPERTY
+  {id:"gift",label:"Gift Funds",group:"Assets & Property"},
+  {id:"retained",label:"Retained Property",group:"Assets & Property"},
+  {id:"retained_rent",label:"Retained Property — Renting Out",group:"Assets & Property"},
+  {id:"retire_acct",label:"Retirement Accounts",group:"Assets & Property"},
+  {id:"retire_plan",label:"Retirement Plan Documents",group:"Assets & Property"},
+  {id:"brokerage",label:"Stocks / Bonds / Brokerage",group:"Assets & Property"},
+  {id:"trust",label:"Trust Funds",group:"Assets & Property"},
+  {id:"sale_asset",label:"Sale of Personal Property",group:"Assets & Property"},
+  // BORROWER BACKGROUND
+  {id:"residency",label:"Residency History",group:"Borrower Background"},
+  {id:"divorce_final",label:"Divorce — Final",group:"Borrower Background"},
+  {id:"divorce_pending",label:"Divorce — In Process",group:"Borrower Background"},
+  {id:"bk",label:"Bankruptcy",group:"Borrower Background"},
+  {id:"emp_history",label:"Employment History",group:"Borrower Background"},
+  {id:"credit_freeze",label:"Credit Freeze",group:"Borrower Background"},
+  {id:"noncit",label:"Non-Citizen / Immigration",group:"Borrower Background"}
+];
+
+// ═══════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════
+let state = { sits:[...DEFAULT_SITS], borrowerName:'', tab:'text', rawOpen:false };
+let settings = {};
+
+// ═══════════════════════════════════════
+// SETTINGS
+// ═══════════════════════════════════════
+function loadSettings() {
+  try { settings = JSON.parse(localStorage.getItem('docchecklist_settings') || '{}'); } catch(e) { settings = {}; }
+  return settings.name ? true : false;
+}
+function saveSettings() {
+  settings = {
+    name: el('s-name').value.trim(), phone: el('s-phone').value.trim(), email: el('s-email').value.trim(),
+    teamName: el('s-team-name').value.trim(), teamEmail: el('s-team-email').value.trim(), appUrl: el('s-app-url').value.trim(),
+    nmls: el('s-nmls').value.trim(), stateNmls: el('s-state-nmls').value.trim(), company: el('s-company').value.trim()
+  };
+  if (!settings.name) { toast('Enter your name'); return; }
+  if (!settings.teamEmail) { toast('Enter a team email'); return; }
+  localStorage.setItem('docchecklist_settings', JSON.stringify(settings));
+  toast('Settings saved');
+  showScreen('builder');
+}
+function populateSettingsForm() {
+  el('s-name').value = settings.name||''; el('s-phone').value = settings.phone||'';
+  el('s-email').value = settings.email||''; el('s-team-name').value = settings.teamName||'';
+  el('s-team-email').value = settings.teamEmail||'';
+  el('s-app-url').value = settings.appUrl||''; el('s-nmls').value = settings.nmls||'';
+  el('s-state-nmls').value = settings.stateNmls||''; el('s-company').value = settings.company||'';
+}
+
+// ═══════════════════════════════════════
+// BUILDER
+// ═══════════════════════════════════════
+function buildConditions() {
+  const c = el('conditions-container');
+  const groups = {};
+  const vis = SITUATIONS;
+  vis.forEach(s => { if (!groups[s.group]) groups[s.group] = { items:[], color:s.grpColor }; groups[s.group].items.push(s); });
+  let html = '';
+  for (const [g, data] of Object.entries(groups)) {
+    const isGreen = data.color === 'green';
+    html += `<div class="group-label ${isGreen?'green':''}">${g}</div><div class="chips">`;
+    data.items.forEach(s => {
+      const on = state.sits.includes(s.id);
+      const n = MASTER[s.id] ? MASTER[s.id].items.length : 0;
+      const cls = on ? (isGreen ? 'chip on-green' : 'chip on') : 'chip';
+      html += `<button class="${cls}" data-sit="${s.id}" onclick="toggleSit(this)">${on?'✓ ':''}${s.label}${n>1?'<span class=chip-count>('+n+')</span>':''}</button>`;
+    });
+    html += '</div>';
+  }
+  c.innerHTML = html;
+}
+function toggleSit(btn) {
+  const id = btn.dataset.sit;
+  // If selecting retained_rent, deselect retained (and vice versa)
+  if (id === 'retained_rent' && !state.sits.includes(id)) {
+    state.sits = state.sits.filter(s => s !== 'retained');
+  }
+  if (id === 'retained' && !state.sits.includes(id)) {
+    state.sits = state.sits.filter(s => s !== 'retained_rent');
+  }
+  // If selecting divorce_final, deselect divorce_pending (and vice versa)
+  if (id === 'divorce_final' && !state.sits.includes(id)) {
+    state.sits = state.sits.filter(s => s !== 'divorce_pending');
+  }
+  if (id === 'divorce_pending' && !state.sits.includes(id)) {
+    state.sits = state.sits.filter(s => s !== 'divorce_final');
+  }
+  const idx = state.sits.indexOf(id);
+  if (idx > -1) state.sits.splice(idx,1); else state.sits.push(id);
+  buildConditions();
+}
+// ═══════════════════════════════════════
+// GENERATE
+// ═══════════════════════════════════════
+function generate() {
+  state.borrowerName = el('b-name').value.trim();
+  state.tab = 'text'; state.rawOpen = false;
+  showScreen('output');
+  renderOutput();
+}
+function makeTextMsg() {
+  const items = [];
+  state.sits.forEach(id => {
+    if (MASTER[id]) MASTER[id].items.forEach(t => { if (!t.startsWith('Note:')) items.push(t); });
+  });
+  const name = state.borrowerName;
+  let msg = name ? `Hey ${name}! Great chatting with you. Here's what we'll need to get your loan moving:\n\n` :
+    `Hey! Great chatting with you. Here's what we'll need to get your loan moving:\n\n`;
+  msg += items.map(i => `• ${i}`).join('\n\n');
+  if (state.sits.includes('app_invite') && settings.appUrl) {
+    msg += `\n\nWhen you're ready, you can get started on your application here:\n${settings.appUrl}`;
+  }
+  msg += `\n\nFor now, go ahead and email whatever you have to: ${settings.teamEmail}`;
+  msg += `\n\nGo ahead and send these over as you find them — no need to wait until you have everything.`;
+  msg += `\n\n— ${settings.name}`;
+  if (settings.teamName) msg += `\n${settings.teamName}`;
+  return msg;
+}
+function makeDocReq() {
+  const stdIds = ["photoid","paystubs","w2","yearend_stubs","hr_contact"];
+  const activeStd = stdIds.filter(id => state.sits.includes(id));
+  const cond = state.sits.filter(id => !stdIds.includes(id) && MASTER[id] && id !== 'app_invite');
+  let out = '';
+  if (activeStd.length) {
+    out += 'DOCUMENTS NEEDED FROM EVERYONE\n';
+    activeStd.forEach(id => MASTER[id].items.forEach(t => out += `- ${t}\n`));
+  }
+  if (cond.length) {
+    out += '\nADDITIONAL ITEMS SPECIFIC TO YOUR LOAN\n';
+    cond.forEach(id => { out += `\n${MASTER[id].title}\n`; MASTER[id].items.forEach(t => out += `- ${t}\n`); });
+  }
+  return out.trim();
+}
+function renderOutput() {
+  const name = state.borrowerName;
+  el('out-title').textContent = name ? `${name}'s Docs` : 'Doc List';
+  el('out-subtitle').textContent = `${state.sits.filter(id=>MASTER[id]).length} sections selected`;
+  const isText = state.tab === 'text';
+  el('tab-text').className = `tab ${isText?'on':'off'}`;
+  el('tab-doc').className = `tab ${isText?'off':'on'}`;
+  el('preview-label').textContent = isText ? 'Text Message Preview' : 'Doc Request — Paste Ready';
+  el('share-btn-label').textContent = isText ? '📲 Text This to Borrower' : '📋 Share Doc Request';
+  const content = isText ? makeTextMsg() : makeDocReq();
+  const box = el('preview-box');
+  box.textContent = content;
+  box.className = `preview ${isText?'preview-text':'preview-doc'}`;
+  el('raw-text').value = content;
+  el('sections-list').innerHTML = state.sits.filter(id=>MASTER[id]).map(id =>
+    `<div class="section-row"><div class="section-dot"></div><span style="flex:1">${MASTER[id].title}</span><span style="font-size:12px;color:var(--text3)">${MASTER[id].items.length}</span></div>`
+  ).join('');
+  el('raw-card').style.display = state.rawOpen ? 'block' : 'none';
+  el('raw-toggle-label').textContent = state.rawOpen ? 'Hide' : 'Select & Copy Manually';
+}
+function switchTab(t) { state.tab = t; state.rawOpen = false; renderOutput(); }
+function toggleRaw() { state.rawOpen = !state.rawOpen; renderOutput(); if (state.rawOpen) setTimeout(()=>el('raw-text').focus(),100); }
+async function shareOutput() {
+  const content = state.tab === 'text' ? makeTextMsg() : makeDocReq();
+  if (navigator.share) {
+    try { await navigator.share({text:content}); toast('Shared!'); } catch(e) { if (e.name!=='AbortError') { state.rawOpen=true; renderOutput(); } }
+  } else { state.rawOpen=true; renderOutput(); }
+}
+function copyRaw() {
+  const ta = el('raw-text'); ta.select(); ta.setSelectionRange(0,99999);
+  document.execCommand('copy'); toast('Copied!');
+}
+function resetBuilder() {
+  state = { sits:[...DEFAULT_SITS], borrowerName:'', tab:'text', rawOpen:false };
+  showScreen('builder');
+  buildConditions();
+  el('b-name').value = '';
+}
+
+// ═══════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  el('screen-'+name).classList.add('active');
+  window.scrollTo(0,0);
+  if (name === 'settings') populateSettingsForm();
+  if (name === 'builder') {
+    el('builder-title').textContent = settings.teamName ? `${settings.teamName}` : 'Document Checklist';
+    el('builder-subtitle').textContent = settings.teamName ? 'Document Checklist' : '';
+  }
+}
+function el(id) { return document.getElementById(id); }
+function toast(msg) { const t = el('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),1800); }
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+(function init() {
+  const hasSettings = loadSettings();
+  buildConditions();
+  showScreen(hasSettings ? 'builder' : 'settings');
+})();
+</script>
+</body>
+</html>
